@@ -1,0 +1,87 @@
+---
+title: "Test a perceptual phenomenon"
+author: "Surya"
+date: "22/05/2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Stroop task
+
+###1. What is our independent variable? What is our dependent variable?
+Independent Variables: Text color and Word
+
+Dependent Variables: Response time to tell the correct color
+
+###2. What is an appropriate set of hypotheses for this task? What kind of statistical test do you expect to perform?
+**$H_0$**: Response time is same irrespective of word condition [congruent (c) or incongruent (ic)] i.e.
+    $$\mu_c = \mu_{ic}$$
+**$H_A$**: Response time will be more for incongruent word condition i.e.  
+    $$\mu_c < \mu_{ic}$$
+
+**Statistical Test**: one tail t-test  
+**Explaination**: As per the stroop test experiment, each participant is partipating in both condition (congruent or incongruent), hence it is a dependent within subject experiment design. In this case our assumption is that incongruent condition will take more time since there will be a mismatch in word and the color and naturally human brain will take more time to think and find the exact color. Under this assumption we are only testing if average response time under incongruent codition is significantly more than the average response time under congruent condition. Hence we are testing results using one tail t-test.
+
+###3. Report some descriptive statistics regarding this dataset. Include at least one measure of central tendency and at least one measure of variability.
+Here are some descriptive statistics of the dataset.
+```{r, echo=FALSE}
+setwd("/Users/surya/Documents/DAND/")
+data = read.csv("stroopdata.csv")
+summary(data)
+
+sdc <- sd(data$Congruent)
+sdci <- sd(data$Incongruent)
+```
+Standard Deviation for Congruent condition is **`r sdc`**  
+Standard Deviation for Incongruent condition is **`r sdci`**
+
+
+###4. Provide one or two visualizations that show the distribution of the sample data. Write one or two sentences noting what you observe about the plot or plots. 
+
+Box plot showing statistics for both conditions:
+```{r echo=FALSE, fig.align='center'}
+boxplot(data)
+```
+The boxplots above shows the variability in ranges among two conditions. The visual pattern also supports our assumption that response time for Incongruent condition is high as compare to its cunterpart.
+
+```{r echo=FALSE, fig.align='center'}
+hist(data$Congruent, main = "Histogram of Response time (Congruent)", xlab = "Congruent", ylab = "Frequency")
+```
+Histogram of response time of Congruent condition shows that distribution is almost symmetrical and follows a normal distribution. The visualization also highlights that maximum people took around 15 sec to complete the task.  
+
+However, distribution of the response time of Incongruent condition shows that it is positively skewed. There are many people who finished the task under 20-25 secs as compared to fewer people who took more than 30 sec. 
+
+```{r echo=FALSE, fig.align='center'}
+hist(data$Incongruent, main = "Histogram of Response time (Incongruent)", xlab = "Incongruent", ylab = "Frequency")
+```
+
+
+###5. Statistical test
+We have mean $\bar{m}_{c}$ = **14.05**,  Standard Deviation ${S}_c$ =  **`r sdc`** for Congruent condition while for Incongruent condition, we have mean $\bar{m}_{ic}$ = **22.02**, standard Deviation ${S}_{ic}$ = **`r sdci`** .  
+
+Total number of observations i.e. sample size, **n = 24**  
+
+**t-critical** value at an $\alpha$ level of **0.05** is **1.646**  
+
+Difference between mean, $\bar{m}_{ic} - \bar{m}_c$ i.e. $\bar{m}_D$ = **7.97**  
+
+Standard Deviation of the differences $S_D = \sqrt{S_c^2 + S_{ic}^2}$, i.e. $S_D$ = **5.97**  
+
+t-statistic is given by, $t = \frac{\bar{m}_D - 0}{S_D/\sqrt{n}}$, t = **6.54**
+
+Since, t-statistic is greater than t-critical value at $95$% confident interval. We reject null hypothesis and hence accept the alternate hypothesis.  
+We conclude that response time under Incongruent condition is significantly larger than Congruent condition.
+
+###6.1 What do you think is responsible for the effects observed?
+I think the natural way the mind works, it remembers things in the form of pictures. In case of Congruent we have less number of disturbing elements since both (word and color) giving same information and hence brain doesn't get interfered which leads to quick response.  
+While, In case of Incongruent condition we have an element which is giving wrong information and responsible for distraction, it leads brain to put more effort and time to take the decision.
+
+###6.2 Can you think of an alternative or similar task that would result in a similar effect?
+I think alternative task to stroop effect would be to do the same experiment with shape and its name. For Congruent condition we can ask people to tell the shape of the object while word would be name of the shape e.g. Circle word written inside Circular shape (Shape and word would be same), while in InCongruent condition person has to tell the shape from the word (In this case shape object and word would be different). 
+
+
